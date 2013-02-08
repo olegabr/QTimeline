@@ -1,4 +1,4 @@
-<?php require(__CONFIGURATION__ . '/header.inc.php'); ?>
+<?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/header.inc.php'); ?>
 <?php $this->RenderBegin(); ?>
 
 <div class="instructions">
@@ -9,4 +9,4 @@
 </div>
 
 <?php $this->RenderEnd(); ?>
-<?php require(__CONFIGURATION__ . '/footer.inc.php'); ?>
+<?php require(__DOCROOT__ . __EXAMPLES__ . '/includes/footer.inc.php'); ?>
