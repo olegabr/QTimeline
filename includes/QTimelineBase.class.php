@@ -47,8 +47,8 @@
 
 		public function  __construct($objParentObject, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
-			$this->AddJavascriptFile("../../plugins/QTimelineJs/timeline/timeline-min.js");
-			$this->AddCssFile("../../plugins/QTimelineJs/timeline/timeline.css");
+			$this->AddJavascriptFile("../../plugins/QTimeline/timeline/timeline-min.js");
+			$this->AddCssFile("../../plugins/QTimeline/timeline/timeline.css");
 			
 			$this->CssClass = 'timeline';
 		}
