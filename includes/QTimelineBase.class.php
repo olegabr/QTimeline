@@ -7,7 +7,7 @@
 	 * @property boolean $Animate When true, events are moved animated when resizing or moving them.
 	 * This is very pleasing for the eye, but does require more computational power.
 		animateZoom	boolean	true	When true, events are moved animated when zooming the Timeline. This looks cool, but does require more computational power.
-		axisOnTop	boolean	false	If false (default), the horizontal axis is drawn at the bottom. If true, the axis is drawn on top.
+	 * @property boolean $AxisOnTop If false (default), the horizontal axis is drawn at the bottom. If true, the axis is drawn on top.
 		box.align	String	"center"	Alignment of items with style "box". Available values are "center" (default), "left", or "right").
 		dragAreaWidth	Number	10	The width of the drag areas in pixels. When an event range is selected, it has a drag area on the left and right side, with which the start or end time of the even can be manipulated.
 		editable	boolean	false	If true, the events can be edited, created and deleted. Events can only be editable when th option selectable is true (default). When editable is true, the Timeline can fire events change, edit, add, delete.
@@ -35,7 +35,7 @@
 		showCustomTime	boolean	false	If true, the timeline shows a blue vertical line displaying a custom time. This line can be dragged by the user. The custom time can be utilized to show a state in the past or in the future. When the custom time bar is dragged by the user, an event is triggered, on which the contents of the timeline can be changed in to the state at that moment in time.
 		showMajorLabels	boolean	true	By default, the timeline shows both minor and major date labels on the horizontal axis. For example the minor labels show minutes and the major labels show hours. When showMajorLabels is false, no major labels are shown.
 		showMinorLabels	boolean	true	By default, the timeline shows both minor and major date labels on the horizontal axis. For example the minor labels show minutes and the major labels show hours. When showMinorLabels is false, no minor labels are shown. When both showMajorLabels and showMinorLabels are false, no horizontal axis will be visible.
-		showNavigation	boolean	false	Show a navigation menu with buttons to move and zoom the timeline.
+	 * @property boolean $ShowNavigation Show a navigation menu with buttons to move and zoom the timeline. false by default.
 		zoomable	boolean	true	If true, the timeline is zoomable. When the timeline is zoomed, the rangechange event is fired.
 		width	string	"100%"	The width of the timeline in pixels or as a percentage.
 	 * 
@@ -43,12 +43,15 @@
 	class QTimelineBase extends QTimelineGen {
 		
 		protected $blnAnimate = true;
+		protected $blnAxisOnTop = false;
+		protected $blnShowNavigation = false;
 
 
 		public function  __construct($objParentObject, $strControlId = null) {
 			parent::__construct($objParentObject, $strControlId);
-			$this->AddJavascriptFile("../../plugins/QTimeline/timeline/timeline-min.js");
-			$this->AddCssFile("../../plugins/QTimeline/timeline/timeline.css");
+			$this->AddJavascriptFile("../../plugins/QTimeline/timeline/timeline.js");
+			$this->AddJavascriptFile("../../plugins/QTimeline/timeline/jquery.timeline.js");
+			$this->AddCssFile("../../plugins/QTimeline/timeline/jquery.timeline.css");
 			
 			$this->CssClass = 'timeline';
 		}
@@ -82,6 +85,8 @@
 		protected function makeJqOptions() {
 			$strJqOptions = '';
 			$strJqOptions .= $this->makeJsProperty('Animate', 'animate');
+			$strJqOptions .= $this->makeJsProperty('AxisOnTop', 'axisOnTop');
+			$strJqOptions .= $this->makeJsProperty('ShowNavigation', 'showNavigation');
 			if ($strJqOptions) $strJqOptions = substr($strJqOptions, 0, -2);
 			return $strJqOptions;
 		}
@@ -90,12 +95,12 @@
 			return $this->ControlId;
 		}
 
+		public function getJqSetupFunction() {
+			return 'timeline';
+		}
+
 		public function GetControlJavaScript() {
-			// timeline = new links.Timeline(document.getElementById('mytimeline'));
-			// timeline.draw(data, options);
-			return sprintf('qc.controllers["%s"]=new links.Timeline(document.getElementById("%s")); qc.controllers["%s"].draw([%s], {%s});'
-				, $this->getJqControlId(), $this->getJqControlId(), $this->getJqControlId()
-				, $this->getDataJson(), $this->makeJqOptions());
+			return sprintf('jQuery("#%s").%s([],{%s})', $this->getJqControlId(), $this->getJqSetupFunction(), $this->makeJqOptions());
 		}
 
 		public function GetEndScript() {
@@ -105,6 +110,8 @@
 		public function __get($strName) {
 			switch ($strName) {
 				case 'Animate': return $this->blnAnimate;
+				case 'AxisOnTop': return $this->blnAxisOnTop;
+				case 'ShowNavigation': return $this->blnShowNavigation;
 				default: 
 					try { 
 						return parent::__get($strName); 
@@ -120,6 +127,24 @@
 					try {
 						$blnAnimate = QType::Cast($mixValue, QType::Boolean);
 						$this->blnAnimate = $blnAnimate;
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+				case "AxisOnTop":
+					try {
+						$blnAxisOnTop = QType::Cast($mixValue, QType::Boolean);
+						$this->blnAxisOnTop = $blnAxisOnTop;
+						break;
+					} catch (QInvalidCastException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+				case "ShowNavigation":
+					try {
+						$blnShowNavigation = QType::Cast($mixValue, QType::Boolean);
+						$this->blnShowNavigation = $blnShowNavigation;
 						break;
 					} catch (QInvalidCastException $objExc) {
 						$objExc->IncrementOffset();
