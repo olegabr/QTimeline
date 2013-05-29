@@ -3,7 +3,7 @@
 $objPlugin = new QPlugin();
 $objPlugin->strName = "QTimeline";
 $objPlugin->strDescription = 'qcubed plugin QTimeline';
-$objPlugin->strVersion = "0.1";
+$objPlugin->strVersion = "0.2";
 $objPlugin->strPlatformVersion = "2.1";
 $objPlugin->strAuthorName = "Oleg Abrosimov";
 $objPlugin->strAuthorEmail = "olegabr [at] yandex [dot] ru";
@@ -12,7 +12,9 @@ $components = array();
 
 $components[] = new QPluginJsFile("timeline/timeline-min.js");
 $components[] = new QPluginJsFile("timeline/timeline.js");
+$components[] = new QPluginJsFile("timeline/jquery.timeline.js");
 $components[] = new QPluginCssFile("timeline/timeline.css");
+$components[] = new QPluginCssFile("timeline/jquery.timeline.css");
 $components[] = new QPluginImageFile("timeline/img");
 
 $components[] = new QPluginControlFile("includes/QTimeline.class.php");
