@@ -194,7 +194,7 @@ links.Timeline = function (container) {
         'style'          :'box'
     };
 	this.setOptions(this.regional['']);
-	this.setOptions(this.regional['ru']);
+	//this.setOptions(this.regional['ru']);
 
     this.clientTimeOffset = 0;    // difference between client time and the time
     // set via Timeline.setCurrentTime()
